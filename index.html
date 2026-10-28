@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STARK 影像 · AI 影视作品集</title>
+<meta name="description" content="AI 驱动影视创作——科幻 / 奇幻 / 短剧。剧本 · 分镜 · 成片，工业化短剧生产全流程作品集。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --bg-2:#0f0f16;
+  --panel:#15151e;
+  --panel-2:#1b1b26;
+  --line:rgba(255,255,255,.08);
+  --text:#f2f0ea;
+  --muted:#9b97a3;
+  --accent:#e8a94a;      /* 暖金 */
+  --accent-2:#c95b3f;    /* 赤陶 */
+  --accent-3:#7a86ff;    /* 冷紫 */
+  --serif:"Noto Serif SC", "Songti SC", "SimSun", serif;
+  --sans:"Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --max:1180px;
+  --radius:18px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:var(--max);margin:0 auto;padding:0 28px}
+
+/* ===== 导航 ===== */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:100;
+  padding:18px 0;
+  transition:background .35s var(--ease),padding .35s var(--ease),box-shadow .35s;
+}
+.nav.scrolled{
+  background:rgba(10,10,15,.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  padding:12px 0;
+  box-shadow:0 1px 0 var(--line);
+}
+.nav .container{display:flex;align-items:center;justify-content:space-between}
+.brand{
+  font-family:var(--serif);font-weight:900;font-size:1.3rem;letter-spacing:.04em;
+  display:flex;align-items:center;gap:10px;
+}
+.brand .dot{
+  width:10px;height:10px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow:0 0 14px rgba(232,169,74,.7);
+}
+.brand span em{font-style:normal;color:var(--accent)}
+.menu{display:flex;align-items:center;gap:34px}
+.menu a{
+  font-size:.9rem;color:var(--muted);position:relative;transition:color .25s;
+  letter-spacing:.02em;
+}
+.menu a::after{
+  content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;
+  background:var(--accent);transition:width .3s var(--ease);
+}
+.menu a:hover{color:var(--text)}
+.menu a:hover::after{width:100%}
+.menu .cta{
+  padding:9px 20px;border:1px solid var(--accent);border-radius:999px;color:var(--accent);
+  transition:all .25s;
+}
+.menu .cta::after{display:none}
+.menu .cta:hover{background:var(--accent);color:#14100a}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.hamburger span{width:24px;height:2px;background:var(--text);transition:all .3s var(--ease);display:block}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ===== Hero ===== */
+.hero{
+  min-height:100vh;display:flex;align-items:center;position:relative;
+  padding:140px 0 90px;overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;z-index:-1;overflow:hidden}
+.hero-bg::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(60% 50% at 72% 28%, rgba(122,134,255,.20), transparent 60%),
+    radial-gradient(50% 45% at 18% 70%, rgba(201,91,63,.18), transparent 62%),
+    radial-gradient(40% 40% at 50% 10%, rgba(232,169,74,.10), transparent 60%),
+    var(--bg);
+}
+.hero-bg .grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:overlay}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.78rem;letter-spacing:.28em;color:var(--accent);text-transform:uppercase;
+  border:1px solid rgba(232,169,74,.35);border-radius:999px;padding:8px 18px;
+  margin-bottom:30px;
+}
+.hero-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.hero h1{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.08;letter-spacing:.01em;
+  margin-bottom:26px;
+}
+.hero h1 .grad{
+  background:linear-gradient(100deg,var(--accent) 0%,var(--accent-2) 50%,var(--accent-3) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p.lead{
+  max-width:620px;color:var(--muted);font-size:1.08rem;margin-bottom:44px;
+}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;border-radius:999px;font-weight:600;font-size:.98rem;
+  transition:all .3s var(--ease);cursor:pointer;border:1px solid transparent;
+}
+.btn-primary{
+  background:linear-gradient(120deg,var(--accent),var(--accent-2));
+  color:#14100a;box-shadow:0 10px 30px rgba(201,91,63,.32);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(201,91,63,.45)}
+.btn-ghost{border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+/* 数据带 */
+.stats{
+  margin-top:80px;display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.stat{padding:26px 10px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat b{font-family:var(--serif);font-size:2.1rem;font-weight:900;display:block;line-height:1.1}
+.stat b i{font-style:normal;color:var(--accent)}
+.stat span{color:var(--muted);font-size:.82rem;letter-spacing:.08em}
+
+/* ===== 区块通用 ===== */
+section{position:relative}
+.section{padding:110px 0}
+.sec-head{margin-bottom:56px}
+.sec-eyebrow{
+  color:var(--accent);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;
+  display:block;margin-bottom:14px;
+}
+.sec-title{font-family:var(--serif);font-weight:900;font-size:clamp(1.9rem,4vw,3rem);line-height:1.15}
+.sec-title em{font-style:normal;color:var(--accent)}
+.sec-sub{color:var(--muted);margin-top:14px;max-width:560px}
+
+/* ===== 作品墙 ===== */
+.works{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.work-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;transition:transform .45s var(--ease),border-color .45s,box-shadow .45s;
+  display:flex;flex-direction:column;
+}
+.work-card:hover{
+  transform:translateY(-8px);border-color:rgba(232,169,74,.4);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.work-cover{
+  position:relative;aspect-ratio:4/5;overflow:hidden;
+  background:linear-gradient(160deg,var(--c1),var(--c2));
+  display:flex;flex-direction:column;justify-content:flex-end;padding:26px;
+}
+.work-cover::before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,transparent 40%,rgba(0,0,0,.72)),
+    radial-gradient(120% 80% at 20% 0%,rgba(255,255,255,.16),transparent 50%);
+}
+.work-cover::after{
+  content:"";position:absolute;inset:0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/></svg>");
+  mix-blend-mode:overlay;
+}
+.work-index{
+  position:absolute;top:22px;left:24px;font-family:var(--serif);font-weight:900;
+  font-size:1rem;color:rgba(255,255,255,.6);letter-spacing:.1em;z-index:2;
+}
+.work-frame{
+  position:absolute;top:16px;right:16px;bottom:16px;left:16px;
+  border:1px solid rgba(255,255,255,.28);border-radius:10px;z-index:1;pointer-events:none;
+}
+.work-title{
+  position:relative;z-index:2;font-family:var(--serif);font-weight:900;
+  font-size:1.7rem;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.work-genre{
+  position:relative;z-index:2;color:rgba(255,255,255,.85);font-size:.8rem;
+  letter-spacing:.14em;margin-top:8px;text-transform:uppercase;
+}
+.work-body{padding:20px 24px 24px;display:flex;flex-direction:column;flex:1}
+.work-desc{color:var(--muted);font-size:.92rem;flex:1}
+.work-foot{
+  margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.78rem;color:var(--muted);letter-spacing:.05em;
+}
+.work-foot .play{
+  display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-weight:600;
+}
+.work-foot .play svg{width:15px;height:15px}
+
+/* ===== 能力 ===== */
+.caps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.cap{
+  padding:34px 30px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--panel);transition:all .4s var(--ease);
+}
+.cap:hover{border-color:rgba(232,169,74,.4);transform:translateY(-4px)}
+.cap .ico{
+  width:52px;height:52px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));margin-bottom:22px;
+}
+.cap .ico svg{width:26px;height:26px}
+.cap h3{font-family:var(--serif);font-size:1.3rem;margin-bottom:12px}
+.cap p{color:var(--muted);font-size:.93rem}
+
+/* ===== 关于 ===== */
+.about{background:var(--bg-2);border-top:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:center}
+.about-photo{
+  aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;position:relative;
+  background:
+    radial-gradient(70% 70% at 30% 30%,rgba(232,169,74,.25),transparent 60%),
+    radial-gradient(60% 60% at 75% 70%,rgba(122,134,255,.22),transparent 60%),
+    var(--panel);
+  border:1px solid var(--line);
+  display:grid;place-items:center;
+}
+.about-photo::after{
+  content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.15);border-radius:12px;
+}
+.about-photo .ph{
+  font-family:var(--serif);font-weight:900;font-size:clamp(3rem,8vw,5rem);
+  background:linear-gradient(120deg,var(--accent),var(--accent-2),var(--accent-3));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.about h2{font-family:var(--serif);font-weight:900;font-size:clamp(1.8rem,3.6vw,2.6rem);margin-bottom:24px;line-height:1.2}
+.about p{color:var(--muted);margin-bottom:18px}
+.about .roles{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.about .roles span{
+  font-size:.8rem;padding:7px 16px;border:1px solid var(--line);border-radius:999px;
+  color:var(--text);letter-spacing:.04em;
+}
+
+/* ===== 联系 ===== */
+.contact{text-align:center}
+.contact .sec-head{max-width:640px;margin:0 auto 50px}
+.contact-card{
+  max-width:620px;margin:0 auto;padding:46px 40px;border-radius:24px;
+  background:linear-gradient(160deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);
+}
+.contact-card h3{font-family:var(--serif);font-size:1.6rem;margin-bottom:10px}
+.contact-card>p{color:var(--muted);margin-bottom:30px}
+.contact-form{display:flex;flex-direction:column;gap:16px;text-align:left}
+.field input,.field textarea{
+  width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;
+  padding:14px 18px;color:var(--text);font-family:var(--sans);font-size:.95rem;
+  transition:border-color .25s;
+}
+.field textarea{min-height:130px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.contact-form .btn{justify-content:center;margin-top:6px}
+.contact-alt{margin-top:26px;color:var(--muted);font-size:.9rem}
+.contact-alt a{color:var(--accent);font-weight:600}
+
+/* ===== 页脚 ===== */
+footer{
+  border-top:1px solid var(--line);padding:46px 0;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+footer .brand{font-size:1.05rem}
+footer p{color:var(--muted);font-size:.85rem}
+footer .sns{display:flex;gap:18px}
+footer .sns a{color:var(--muted);transition:color .25s;font-size:.9rem}
+footer .sns a:hover{color:var(--accent)}
+
+/* ===== 入场动画 ===== */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-delay="1"]{transition-delay:.1s}
+.reveal[data-delay="2"]{transition-delay:.2s}
+.reveal[data-delay="3"]{transition-delay:.3s}
+
+/* ===== 响应式 ===== */
+@media (max-width:960px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .caps{grid-template-columns:1fr;gap:18px}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:720px){
+  .menu{
+    position:fixed;inset:0;background:rgba(10,10,15,.97);
+    flex-direction:column;justify-content:center;gap:30px;
+    transform:translateY(-100%);transition:transform .4s var(--ease);
+  }
+  .menu.open{transform:none}
+  .menu a{font-size:1.3rem}
+  .hamburger{display:flex;z-index:101}
+  .grid{grid-template-columns:1fr}
+  .section{padding:80px 0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .hero{padding-top:120px}
+  .contact-card{padding:34px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<header class="nav" id="nav">
+  <div class="container">
+    <a href="#top" class="brand"><span class="dot"></span>STARK<span><em>影像</em></span></a>
+    <nav class="menu" id="menu">
+      <a href="#works">作品</a>
+      <a href="#caps">能力</a>
+      <a href="#about">关于</a>
+      <a href="#contact" class="cta">联系合作</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="hero-bg">
+    <div class="grain"></div>
+  </div>
+  <div class="container">
+    <span class="hero-tag reveal">AI-DRIVEN FILM &amp; TELEVISION</span>
+    <h1 class="reveal" data-delay="1">用 AI 生成<br>电影级的<span class="grad">幻想影像</span></h1>
+    <p class="lead reveal" data-delay="2">
+      从剧本、分镜到成片——以 Seedance / GPT Image 为核心引擎，
+      工业化量产科幻与奇幻短剧。这里是我的一部分作品。
+    </p>
+    <div class="hero-actions reveal" data-delay="3">
+      <a href="#works" class="btn btn-primary">查看作品</a>
+      <a href="#contact" class="btn btn-ghost">合作洽谈</a>
+    </div>
+    <div class="stats reveal" data-delay="3">
+      <div class="stat"><b><i>30</i>+</b><span>成片作品</span></div>
+      <div class="stat"><b><i>8</i></b><span>题材类型</span></div>
+      <div class="stat"><b><i>500</i>+</b><span>分钟成片</span></div>
+      <div class="stat"><b><i>100%</i></b><span>AI 生成</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 作品墙 -->
+<section class="section works" id="works">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">Selected Works</span>
+      <h2 class="sec-title">近期<em>作品</em></h2>
+      <p class="sec-sub">占位作品示例——替换为你自己的成片即可上线。</p>
+    </div>
+    <div class="grid">
+
+      <article class="work-card reveal">
+        <div class="work-cover" style="--c1:#7a4a2b;--c2:#1c0f12">
+          <span class="work-index">01</span><span class="work-frame"></span>
+          <h3 class="work-title">美女与老头</h3>
+          <span class="work-genre">都市奇幻 · 系统流短剧</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">62 岁房东意外重生，绑定系统开启第二人生。都市奇情 × 逆袭爽点。</p>
+          <div class="work-foot">
+            <span>12 集 · 每集 3 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="1">
+        <div class="work-cover" style="--c1:#16204d;--c2:#0a0a1f">
+          <span class="work-index">02</span><span class="work-frame"></span>
+          <h3 class="work-title">星际觉醒</h3>
+          <span class="work-genre">科幻 · 概念预告</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">深空殖民舰失联十年后归来，带回的却不是人类。硬科幻悬疑概念片。</p>
+          <div class="work-foot">
+            <span>1 集 · 3 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="2">
+        <div class="work-cover" style="--c1:#2e5b4b;--c2:#0d1714">
+          <span class="work-index">03</span><span class="work-frame"></span>
+          <h3 class="work-title">山海异志</h3>
+          <span class="work-genre">东方奇幻 · 短片</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">《山海经》异兽在当代苏醒，少年持古籍踏上降妖之路。国风奇幻短片。</p>
+          <div class="work-foot">
+            <span>1 集 · 5 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal">
+        <div class="work-cover" style="--c1:#3c1a4a;--c2:#12081a">
+          <span class="work-index">04</span><span class="work-frame"></span>
+          <h3 class="work-title">幻城异闻</h3>
+          <span class="work-genre">奇幻 · 短剧</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">误入镜像之城的少女，在真实与虚幻间寻找归途。高概念奇幻短剧。</p>
+          <div class="work-foot">
+            <span>8 集 · 每集 3 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="1">
+        <div class="work-cover" style="--c1:#5b1f2a;--c2:#140a0c">
+          <span class="work-index">05</span><span class="work-frame"></span>
+          <h3 class="work-title">末日倒计时</h3>
+          <span class="work-genre">科幻 · 惊悚</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">流星雨前 72 小时，一座城决定自己的命运。末日惊悚向概念短片。</p>
+          <div class="work-foot">
+            <span>1 集 · 4 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="2">
+        <div class="work-cover" style="--c1:#40206b;--c2:#0d0d24">
+          <span class="work-index">06</span><span class="work-frame"></span>
+          <h3 class="work-title">赛博霓虹</h3>
+          <span class="work-genre">科幻 · 赛博朋克</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">义体改造人的记忆黑市，一场关于「我是谁」的追杀。赛博朋克动作短片。</p>
+          <div class="work-foot">
+            <span>1 集 · 4 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal">
+        <div class="work-cover" style="--c1:#1e4a5e;--c2:#0a1620">
+          <span class="work-index">07</span><span class="work-frame"></span>
+          <h3 class="work-title">时间旅人</h3>
+          <span class="work-genre">科幻 · 悬疑</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">循环 99 次的那一天，他终于发现真相藏在时间之外。</p>
+          <div class="work-foot">
+            <span>1 集 · 5 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="1">
+        <div class="work-cover" style="--c1:#6b4a1e;--c2:#1a1008">
+          <span class="work-index">08</span><span class="work-frame"></span>
+          <h3 class="work-title">龙裔传说</h3>
+          <span class="work-genre">奇幻 · 史诗</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">最后一条龙与屠龙者之女结下契约。史诗奇幻概念预告片。</p>
+          <div class="work-foot">
+            <span>1 集 · 3 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal" data-delay="2">
+        <div class="work-cover" style="--c1:#3a3f55;--c2:#0f1018">
+          <span class="work-index">09</span><span class="work-frame"></span>
+          <h3 class="work-title">镜像人生</h3>
+          <span class="work-genre">悬疑 · 心理科幻</span>
+        </div>
+        <div class="work-body">
+          <p class="work-desc">镜子里的「我」先动了。心理悬疑向科幻短片。</p>
+          <div class="work-foot">
+            <span>1 集 · 4 分钟</span>
+            <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>预告</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- 能力 -->
+<section class="section" id="caps">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">What I Do</span>
+      <h2 class="sec-title">全流程<em>能力</em></h2>
+      <p class="sec-sub">从文字到画面的工业化短剧生产线。</p>
+    </div>
+    <div class="caps">
+      <div class="cap reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#14100a" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <h3>剧本改编</h3>
+        <p>小说 / 灵感 → 工业化短剧剧本，强钩子开场、爽点密布、贴合短视频节奏。</p>
+      </div>
+      <div class="cap reveal" data-delay="1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#14100a" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+        <h3>分镜设计</h3>
+        <p>电影级视听语言 + 短剧高完播节奏，锁死光影、配色与跨镜一致性。</p>
+      </div>
+      <div class="cap reveal" data-delay="2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#14100a" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg></div>
+        <h3>AI 成片</h3>
+        <p>Seedance 2.0 / GPT Image 2 驱动，从关键帧到动态成片，时长真实可控。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="section about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo reveal"><span class="ph">S</span></div>
+      <div class="about-text reveal" data-delay="1">
+        <span class="sec-eyebrow">About</span>
+        <h2>资深编剧导演<br>科幻 &amp; 奇幻方向</h2>
+        <p>深耕短剧爆款逻辑与电影工业流程，专注用 AI 把文字变成可拍摄、可落地的成片方案。以导演视角把控情绪节奏与视觉表现。</p>
+        <p>核心生产工具：Seedance 2.0、GPT Image 2。已沉淀「小说 → 分镜 → 角色/道具/场景资产 → 成片」的完整工业化路径。</p>
+        <div class="roles">
+          <span>剧本改编</span><span>分镜导演</span><span>AI 视频生成</span><span>美术设定</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">Contact</span>
+      <h2 class="sec-title">有项目想<em>一起做</em>？</h2>
+      <p class="sec-sub">无论是短剧改编、概念预告还是定制成片，欢迎聊聊。</p>
+    </div>
+    <div class="contact-card reveal">
+      <h3>留下你的想法</h3>
+      <p>我会在 1-2 个工作日内回复。</p>
+      <form class="contact-form" onsubmit="return handleSubmit(event)">
+        <div class="field"><input type="text" placeholder="你的称呼" required></div>
+        <div class="field"><input type="email" placeholder="邮箱 / 微信" required></div>
+        <div class="field"><textarea placeholder="简单说说你的项目…" required></textarea></div>
+        <button class="btn btn-primary" type="submit">发送信息</button>
+      </form>
+      <p class="contact-alt">或直接邮件联系：<a href="mailto:hello@starkfilm.ai">hello@starkfilm.ai</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;width:100%">
+    <a href="#top" class="brand"><span class="dot"></span>STARK<span><em>影像</em></span></a>
+    <p>© 2026 STARK 影像 · AI 影视作品集</p>
+    <div class="sns">
+      <a href="#">Bilibili</a>
+      <a href="#">抖音</a>
+      <a href="#">小红书</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// 导航滚动状态
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+// 移动端菜单
+const burger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+});
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  burger.classList.remove('open');
+  menu.classList.remove('open');
+}));
+
+// 入场动画
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// 表单占位处理
+function handleSubmit(e){
+  e.preventDefault();
+  alert('这是一个演示表单。接入你的邮件服务（如 Formspree / 企业微信）后即可真正发送。');
+  return false;
+}
+</script>
+</body>
+</html>

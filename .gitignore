@@ -1,0 +1,8 @@
+# 本地临时文件（凭据/脚本等）
+.gh_blob.bin
+.read_gh_token.py
+.gh_token_tmp
+.pwsh_test.txt
+.proc.txt
+.ports.txt
+.git_askpass.sh
